@@ -1,24 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   ft_memset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mring <mring@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/02 15:30:05 by mring             #+#    #+#             */
-/*   Updated: 2024/04/11 16:02:37 by mring            ###   ########.fr       */
+/*   Created: 2023/10/06 13:45:52 by mring             #+#    #+#             */
+/*   Updated: 2023/10/16 15:01:58 by mring            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#include "libft.h"
 
-# include <stdlib.h>
-# include <stdio.h>
-# include <unistd.h>
-# include <sys/types.h>
-# include "./ft_printf/ft_printf.h"
+void	*ft_memset(void *b, int c, size_t len)
+{
+	size_t	i;
 
-char	pipex(void);
+	i = 0;
+	while (i < len)
+	{
+		((unsigned char *)b)[i] = c;
+		i++;
+	}
+	return (b);
+}
 
-#endif
+/*#include <stdio.h>
+int main()
+{
+    char str[] = "Test string for memset.$#@!@#$";
+    printf("%s\n", str);
+    ft_memset(str + 12, 'k', 18);
+    printf("%s\n", str);
+}*/

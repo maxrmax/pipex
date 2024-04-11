@@ -1,24 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mring <mring@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/02 15:30:05 by mring             #+#    #+#             */
-/*   Updated: 2024/04/11 16:02:37 by mring            ###   ########.fr       */
+/*   Created: 2024/01/15 13:34:53 by mring             #+#    #+#             */
+/*   Updated: 2024/04/08 08:10:36 by mring            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#include "get_next_line.h"
+#include <stdio.h>
 
-# include <stdlib.h>
-# include <stdio.h>
-# include <unistd.h>
-# include <sys/types.h>
-# include "./ft_printf/ft_printf.h"
+int	main(void)
+{
+	int		fd;
+	char	*line;
 
-char	pipex(void);
-
-#endif
+	fd = open("lines.txt", O_RDONLY);
+	if (fd == -1)
+	{
+		printf("Error\n");
+		return (1);
+	}
+	while (fd)
+	{
+		line = get_next_line(fd);
+		if (line == NULL)
+			break ;
+		printf("%s", line);
+		free(line);
+	}
+	close(fd);
+	return (0);
+}

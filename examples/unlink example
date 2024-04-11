@@ -1,0 +1,8 @@
+#include <unistd.h>
+
+int main(void)
+{
+    if (access("tmp", F_OK) == 0)
+        unlink("tmp");
+    return (0);
+}

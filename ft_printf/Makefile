@@ -5,19 +5,20 @@
 #                                                     +:+ +:+         +:+      #
 #    By: mring <mring@student.42heilbronn.de>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/04/02 15:29:54 by mring             #+#    #+#              #
-#    Updated: 2024/04/11 16:13:01 by mring            ###   ########.fr        #
+#    Created: 2023/10/06 12:40:14 by mring             #+#    #+#              #
+#    Updated: 2024/02/07 16:49:44 by mring            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
+NAME	= libftprintf.a
 
-NAME	= pipex
-CC		= gcc
-SRCS	= pipex.c
-HEADERS = pipex.h
-CFLAGS	= -Wall -Wextra -Werror -I.
+SRCS	= ft_printf.c ft_printf_print.c
+
+HEADERS = ft_printf.h
 
 OBJECTS	= ${SRCS:.c=.o}
+
+CFLAGS	= -Wall -Wextra -Werror
 
 %.o: %.c $(HEADERS) Makefile
 	$(CC) -c ${CFLAGS} -o $@ $<
@@ -37,4 +38,3 @@ fclean: clean
 re: fclean all
 
 .PHONY:		all clean fclean re
-# informs comp that these are not files

@@ -1,0 +1,23 @@
+#include <sys/types.h>
+#include <sys/wait.h>
+
+// waiting for one child
+int main(void)
+{
+    int status;
+    
+    wait(&status);
+}
+
+// waiting for multiple children
+// waiting for a termination then iterate down
+int main(void)
+{
+    int status;
+    
+    while (n > 0)
+    {
+        wait(&status);
+        n--;
+    }
+}

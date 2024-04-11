@@ -1,24 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   ft_bzero.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mring <mring@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/02 15:30:05 by mring             #+#    #+#             */
-/*   Updated: 2024/04/11 16:02:37 by mring            ###   ########.fr       */
+/*   Created: 2023/10/09 19:21:33 by mring             #+#    #+#             */
+/*   Updated: 2023/10/16 14:57:50 by mring            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#include "libft.h"
 
-# include <stdlib.h>
-# include <stdio.h>
-# include <unistd.h>
-# include <sys/types.h>
-# include "./ft_printf/ft_printf.h"
+void	ft_bzero(void *s, size_t len)
+{
+	char	*p;
+	size_t	i;
 
-char	pipex(void);
+	p = s;
+	i = 0;
+	while (i < len)
+	{
+		p[i] = '\0';
+		i++;
+	}
+}
+/* 
+#include <stdio.h>
 
-#endif
+int	main(void)
+{
+	char	str[] = "Test string for memset.$#@!@#$";
+	char	*ptr;
+
+	ptr = str;
+	printf("before: %s\n", str);
+	ft_bzero(ptr, 5);
+	printf(" after: %s\n", str);
+}
+ */

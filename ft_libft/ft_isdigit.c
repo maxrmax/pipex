@@ -1,24 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   ft_isdigit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mring <mring@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/02 15:30:05 by mring             #+#    #+#             */
-/*   Updated: 2024/04/11 16:02:37 by mring            ###   ########.fr       */
+/*   Created: 2023/10/10 20:18:41 by mring             #+#    #+#             */
+/*   Updated: 2023/10/16 14:47:05 by mring            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#include "libft.h"
 
-# include <stdlib.h>
-# include <stdio.h>
-# include <unistd.h>
-# include <sys/types.h>
-# include "./ft_printf/ft_printf.h"
-
-char	pipex(void);
-
-#endif
+int	ft_isdigit(int digit)
+// digit check ASCII 48-57
+{
+	if (digit >= '0' && digit <= '9')
+		return (1);
+	else
+		return (0);
+}

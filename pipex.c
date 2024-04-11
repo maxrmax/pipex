@@ -6,11 +6,12 @@
 /*   By: mring <mring@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 15:30:03 by mring             #+#    #+#             */
-/*   Updated: 2024/04/10 17:49:51 by mring            ###   ########.fr       */
+/*   Updated: 2024/04/11 15:33:12 by mring            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+#include <fcntl.h>
 /*
 allowed functions:
 	open, close, read, write,
@@ -54,28 +55,29 @@ char	pipex(void)
 // exec
 	// pipe, fork, if child/dup2/execv,else/close
 //cleanup
+
 int	main(int argc, char *argv[])
 {
-	pid_t	pid;
-	int		i;
+	int		fd;
 
-	pid = fork();
-	if (pid == -1)
-	{
-		perror("fork");
-		exit(EXIT_FAILURE);
-	}
-	if (pid == 0)
-		printf("child (pid: %d)\n", getpid());
-	else
-		printf("parent (pid: %d)\n", getpid());
-	i = 0;
-	while (i < argc)
-	{
-		printf("Argument %d: %s\n", i, argv[i]);
-		i++;
-	}
+	if (access("infile", R_OK) == -1)
+		ft_printf("no such file or directory: %s", argv[1]);
+	fd = open("outfile", O_CREAT | O_RDWR, 0666);
 	return (0);
 }
-
-// exploit, programmatic expression of will
+	// pid = fork();
+	// if (pid == -1)
+	// {
+	// 	perror("fork");
+	// 	exit(EXIT_FAILURE);
+	// }
+	// if (pid == 0)
+	// 	printf("child (pid: %d)\n", getpid());
+	// else
+	// 	printf("parent (pid: %d)\n", getpid());
+	// i = 0;
+	// while (i < argc)
+	// {
+	// 	printf("Argument %d: %s\n", i, argv[i]);
+	// 	i++;
+	// }
