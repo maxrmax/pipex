@@ -6,7 +6,7 @@
 /*   By: mring <mring@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 15:30:05 by mring             #+#    #+#             */
-/*   Updated: 2024/04/11 16:02:37 by mring            ###   ########.fr       */
+/*   Updated: 2024/04/23 15:50:14 by mring            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,6 @@
 # include <sys/types.h>
 # include "./ft_printf/ft_printf.h"
 
-char	pipex(void);
+// char	pipex(void);
 
 #endif
