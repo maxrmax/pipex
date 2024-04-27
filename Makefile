@@ -6,7 +6,7 @@
 #    By: mring <mring@student.42heilbronn.de>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/02 15:29:54 by mring             #+#    #+#              #
-#    Updated: 2024/04/25 15:49:58 by mring            ###   ########.fr        #
+#    Updated: 2024/04/27 13:22:08 by mring            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,9 @@ OBJS = $(SRCS:.c=.o)
 
 # Object files from ft_printf
 FT_PRINTF_OBJS = ft_printf/ft_printf.o ft_printf/ft_printf_print.o
+
+# Object files from libft
+LIBFT_OBJ = ft_libft/.o
 
 # Compilation rule for pipex
 $(NAME): $(OBJS) $(FT_PRINTF_OBJS)

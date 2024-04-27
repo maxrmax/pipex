@@ -6,59 +6,67 @@
 /*   By: mring <mring@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 15:30:03 by mring             #+#    #+#             */
-/*   Updated: 2024/04/25 15:50:53 by mring            ###   ########.fr       */
+/*   Updated: 2024/04/27 13:29:12 by mring            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-#include <fcntl.h>
 
-int	pipex()
+// void	pipex(int f1, int f2, char **argv)
+// {
+
+// }
+
+int	main(int argc, char **argv)
 {
-	return (0);
-}
+	int	infile;
+	int	outfile;
 
-int	main(int argc, char *argv[])
-{
-	int		fd;
-	int i;
-
-	// TODO : n argc for bonus
-	if (argc <= 4)
-		ft_printf("not enough arguments\n");
-	// access fail = -1
-	// when input file is not found
-	if (access(argv[1], R_OK) == -1)
-		ft_printf("file <%s> not found\n", argv[1]);
-	// when output file is not found, create it
-	if (access(argv[argc - 1], F_OK) == -1 )
-		fd = open(argv[argc - 1], O_CREAT, 00644);
-	// if output file is not accessable
-	if (access(argv[argc - 1], W_OK) == -1)
-		ft_printf("%s: writing not permitted", argv[argc - 1]);
-	// iterate over every argument
-	i = 0;
-	while (i < argc)
+	if (argc != 5)
+		ft_printf("input error\n");
+	infile = open(argv[1], O_RDONLY);
+	outfile = open(argv[argc - 1], O_TRUNC | O_CREAT | O_RDWR, 0644);
+	if (infile < 0 || outfile < 0)
+		return (-1);
+	ft_printf("o:%d\n", outfile);
+	ft_printf("i:%d\n", infile);
+	dup2(infile, 0); // change fd from infile to 0
+	ft_printf("2:%d\n", infile);
+	dup2(outfile, 1);
+	ft_printf("3:%d\n", outfile);
+	//
+	pid_t pid;
+	pid = fork();
+	ft_printf("Post-Fork PID:%d\n", pid);
+	if (pid == -1)
 	{
-		ft_printf("%d: %s\n", i, argv[i]);
-		i++;
+		perror("fork");
+		return (1);
+	}
+	if (pid == 0)
+	{
+		ft_printf("Child PID:%d\n", getpid());
+		exit (0);
+	}
+	else
+	{
+		int status;
+		wait(&status);
+		ft_printf("Parent PID %d, Child PID:%d\n", getpid(), pid);
+		ft_printf("Status %d\n", status);
 	}
 	//
-	//
-	if (fd == -1)
-		ft_printf("failed to open <%s> - check permissions\n", argv[1]);
-	ft_printf("%s - %d - %s\n", argv[0], argc, argv[argc - 1]);
-	//
-	
+	//execve NULL
 	//
 	//
 	//
 	//
-	close(fd);
+	//
+	close(infile);
+	close(outfile);
 	return (0);
 }
 
-	// TODO - need last n argument for argv, figure this out
 /*
 < file1 cmd1 | cmd2 > file2
 bash: file1: No such file or directory
