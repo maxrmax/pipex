@@ -6,105 +6,75 @@
 /*   By: mring <mring@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 15:30:03 by mring             #+#    #+#             */
-/*   Updated: 2024/04/27 13:29:12 by mring            ###   ########.fr       */
+/*   Updated: 2024/04/30 15:23:57 by mring            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-// void	pipex(int f1, int f2, char **argv)
-// {
-
-// }
-
-int	main(int argc, char **argv)
+int	mexit(char *err, int perr)
 {
-	int	infile;
-	int	outfile;
-
-	if (argc != 5)
-		ft_printf("input error\n");
-	infile = open(argv[1], O_RDONLY);
-	outfile = open(argv[argc - 1], O_TRUNC | O_CREAT | O_RDWR, 0644);
-	if (infile < 0 || outfile < 0)
-		return (-1);
-	ft_printf("o:%d\n", outfile);
-	ft_printf("i:%d\n", infile);
-	dup2(infile, 0); // change fd from infile to 0
-	ft_printf("2:%d\n", infile);
-	dup2(outfile, 1);
-	ft_printf("3:%d\n", outfile);
-	//
-	pid_t pid;
-	pid = fork();
-	ft_printf("Post-Fork PID:%d\n", pid);
-	if (pid == -1)
+	if (perr)
 	{
-		perror("fork");
-		return (1);
+		write(2, "Pipex: ", 7);
+		perror(err);
 	}
-	if (pid == 0)
+	else
+		write(2, err, ft_strlen(err));
+	exit(1);
+}
+
+void	exec(char *cmd, char **envp)
+{
+	char	**args;
+	char	*path;
+
+	args = ft_split(cmd, ' ');
+	// path
+	execve(path, args, envp);
+	mexit("execve", 1);
+}
+
+void	piping(char *cmd, char **envp, int infile)
+{
+	pid_t	pid;
+	int		pipefd[2];
+
+	if (pipe(pipefd) == -1)
+		mexit("Pipe", 1);
+	pid = fork();
+	if (pid)
 	{
-		ft_printf("Child PID:%d\n", getpid());
-		exit (0);
+		close(pipefd[1]);
+		dup2(pipefd[0], 0);
+		waitpid(pid, NULL, 0);
 	}
 	else
 	{
-		int status;
-		wait(&status);
-		ft_printf("Parent PID %d, Child PID:%d\n", getpid(), pid);
-		ft_printf("Status %d\n", status);
+		close(pipefd[0]);
+		dup2(pipefd[1], 1);
+		if (infile == 0)
+			exit(1);
+		else
+			exec(cmd, envp);
 	}
-	//
-	//execve NULL
-	//
-	//
-	//
-	//
-	//
-	close(infile);
-	close(outfile);
-	return (0);
 }
 
-/*
-< file1 cmd1 | cmd2 > file2
-bash: file1: No such file or directory
-bash: cmd2: command not found
+int	main(int argc, char **argv, char **envp)
+{
+	int		infile;
+	int		outfile;
 
-< infile cmd1 | cmd2 > file2
-bash: cmd1: command not found
-bash: cmd2: command not found
-
-< infile ls -l | cmd2 > file2
-bash: cmd2: command not found
-
-< infile ls -l | wc -l > file2
-644 perm for created file
-# creates file2
-
-Always created file2 if it was missing
-All the cases are displayed here.
-*/
-
-/*
-BONUS:
-
-ls -l << LIM | wc -l >> file
-> one
-> two
-> three
-> four
->>>>> file created and 11 with new line
-
-<< EOF cat | head -n 5 | wc -l >> out
-(1) test
-(2) this
-(3) nuts
-(4) motherf
-EOF
->>>> 4\n
-
-
-
-*/
+	if (argc < 5)
+		return (mexit("Invalid number of arguments\n", 1));
+	infile = open(argv[1], O_RDONLY);
+	outfile = open(argv[argc - 1], O_TRUNC | O_CREAT | O_RDWR, 0644);
+	if (infile < 0)
+		mexit("Infile", 1);
+	if (outfile < 0)
+		mexit("Outfile", 1);
+	dup2(infile, 0); // fd from 3 to 0
+	dup2(outfile, 1); // fd from 4 to 1
+	//redir(argv[2], envp, infile);
+	//exec(argv[3], envp);
+}

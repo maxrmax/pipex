@@ -6,7 +6,7 @@
 /*   By: mring <mring@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 15:30:05 by mring             #+#    #+#             */
-/*   Updated: 2024/04/27 09:57:27 by mring            ###   ########.fr       */
+/*   Updated: 2024/04/29 13:39:03 by mring            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <fcntl.h>
 # include <sys/wait.h>
 # include "./ft_printf/ft_printf.h"
+# include "./ft_libft/libft.h"
 
 // char	pipex(void);
 

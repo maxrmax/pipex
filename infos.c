@@ -93,3 +93,44 @@ ft_exec()
 		close()
 	}
 }*/
+/*
+< file1 cmd1 | cmd2 > file2
+bash: file1: No such file or directory
+bash: cmd2: command not found
+
+< infile cmd1 | cmd2 > file2
+bash: cmd1: command not found
+bash: cmd2: command not found
+
+< infile ls -l | cmd2 > file2
+bash: cmd2: command not found
+
+< infile ls -l | wc -l > file2
+644 perm for created file
+# creates file2
+
+Always created file2 if it was missing
+All the cases are displayed here.
+*/
+
+/*
+BONUS:
+
+ls -l << LIM | wc -l >> file
+> one
+> two
+> three
+> four
+>>>>> file created and 11 with new line
+
+<< EOF cat | head -n 5 | wc -l >> out
+(1) test
+(2) this
+(3) nuts
+(4) motherf
+EOF
+>>>> 4\n
+
+
+
+*/
