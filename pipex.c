@@ -6,7 +6,7 @@
 /*   By: mring <mring@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 15:30:03 by mring             #+#    #+#             */
-/*   Updated: 2024/05/06 21:34:59 by mring            ###   ########.fr       */
+/*   Updated: 2024/05/06 22:58:34 by mring            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,17 @@ int	mexit(char *cmd, int errcode)
 {
 	char	*errmsg;
 
-	if (errcode == 0)
-		return (-1);
-	if (errcode == 1)
+	if (errcode == 1 || errcode == 0)
 		errmsg = ": No such file or directory\n";
-	else if (errcode == 2 || errcode == 127)
+	else if (errcode == 2)
+		errmsg = ": command not found\n";
+	else if (errcode == 127)
 		errmsg = ": command not found\n";
 	else
 		errmsg = ": Error occurred\n";
-	write(2, "pipex: ", 7);
-	write(2, cmd, ft_strlen(cmd));
-	write(2, errmsg, ft_strlen(errmsg));
+	write(STDERR_FILENO, "pipex: ", 7);
+	write(STDERR_FILENO, cmd, ft_strlen(cmd));
+	write(STDERR_FILENO, errmsg, ft_strlen(errmsg));
 	exit(errcode);
 }
 
@@ -98,17 +98,20 @@ char	*get_path(char *cmd, char **envp)
 	int		i;
 
 	i = 0;
-	while (envp[i])
+	if (envp == NULL)
+		path = "/usr/bin:";
+	else
 	{
-		if (str_ncmp(envp[i], "PATH=", 5) == 0)
+		while (envp[i])
 		{
-			path = envp[i] + 5;
-			break ;
+			if (str_ncmp(envp[i], "PATH=", 5) == 0)
+			{
+				path = envp[i] + 5;
+				break ;
+			}
+			i++;
 		}
-		i++;
 	}
-	if (!path || !path[0])
-		return (cmd);
 	while (path && ft_strchr_index(path, ':') > -1)
 	{
 		dir = str_ndup(path, ft_strchr_index(path, ':'));
@@ -140,7 +143,7 @@ void	exec(char *cmd, char **envp)
 	else
 		path = get_path(args[0], envp);
 	execve(path, args, envp);
-	mexit(cmd, 127);
+	mexit(cmd, 0);
 }
 
 // TODO x child for x args / parallel running / concurrency
@@ -187,16 +190,14 @@ int	main(int argc, char **argv, char **envp)
 	int		outfile;
 
 	if (argc < 5)
-		return (mexit("Invalid number of arguments\n", 3));
+		mexit("Invalid number of arguments\n", 3);
 	infile = open(argv[1], O_RDONLY);
-	if (infile < 0)
-		mexit("input", 0);
 	outfile = open(argv[argc - 1], O_TRUNC | O_CREAT | O_RDWR, 0644);
 	if (outfile < 0)
 		mexit("output", 0);
 	dup2(infile, 0);
 	dup2(outfile, 1);
 	piping(argv[2], argv[3], envp, infile);
-	ft_printf("next stuck1\n");
-	return (0);
+	if (infile < 0)
+		mexit("input", 0);
 }
