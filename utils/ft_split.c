@@ -6,34 +6,22 @@
 /*   By: mring <mring@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 14:36:16 by mring             #+#    #+#             */
-/*   Updated: 2024/05/06 15:09:04 by mring            ###   ########.fr       */
+/*   Updated: 2024/05/06 20:33:48 by mring            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include <stdio.h>
+#include "../ft_libft/libft.h"
 
 int	wordcount(char const *s, char c)
 {
 	int	wordcounter;
 	int	i;
-	int	qflag;
 
 	wordcounter = 0;
 	i = 0;
-	qflag = 0;
 	while (s[i] != '\0')
 	{
-		if (s[i] == '\'' && qflag == 0)
-		{
-			qflag = 1;
-			i++;
-		}
-		if (s[i] == '\'' && qflag == 1)
-		{
-			qflag = 0;
-		}
-		if (s[i] != c && (s[i + 1] == c || s[i + 1] == '\0') && qflag == 0)
+		if (s[i] != c && (s[i + 1] == c || s[i + 1] == '\0'))
 			wordcounter++;
 		i++;
 	}
@@ -79,18 +67,7 @@ char	**ft_split(char const *s, char c)
 			j++;
 		if (s[j] == '\0')
 			break ;
-		if (s[j] == '\'')
-		{
-			int start = j;
-			j++;
-			while (s[j] != '\'' && s[j] != '\0')
-				j++;
-			result[i] = ft_substr(s, start, j - start + 1);
-		}
-		else
-		{
-			result[i] = ft_substr(s, j, wordsize(s + j, c));
-		}
+		result[i] = ft_substr(s, j, wordsize(s + j, c));
 		if (!result[i])
 			return (freecandy(result, i));
 		j += wordsize(s + j, c);
@@ -99,17 +76,20 @@ char	**ft_split(char const *s, char c)
 	return (result);
 }
 
-int	main(void)
-{
-	char	**split;
-	int		i = 0;
+// int	main2(void)
+// {
+// 	char	**split;
 
-	split = ft_split("awk '{count++} END {print count}'", ' ');
-	while (split[i])
-	{
-		printf("sp:%s\n", split[i]);
-		i++;
-	}
-	free(split);
-	return 0;
-}
+// 	split = ft_split(" ", ' ');
+// 	free(split);
+// 	return 0;
+// }
+
+// int	main(void)
+// {
+// 	main2();
+// 	system("leaks a.out");
+// }
+
+//git remote add "name" "intra link"
+// git push -u "name" main

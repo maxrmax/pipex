@@ -6,12 +6,11 @@
 /*   By: mring <mring@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 14:36:16 by mring             #+#    #+#             */
-/*   Updated: 2024/05/06 15:09:04 by mring            ###   ########.fr       */
+/*   Updated: 2024/05/06 19:14:35 by mring            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include <stdio.h>
+#include "../ft_libft/libft.h"
 
 int	wordcount(char const *s, char c)
 {
@@ -65,6 +64,7 @@ char	**ft_split(char const *s, char c)
 	char	**result;
 	int		i;
 	int		j;
+	int		start;
 
 	if (!s)
 		return (NULL);
@@ -81,11 +81,11 @@ char	**ft_split(char const *s, char c)
 			break ;
 		if (s[j] == '\'')
 		{
-			int start = j;
+			start = j + 1;
 			j++;
 			while (s[j] != '\'' && s[j] != '\0')
 				j++;
-			result[i] = ft_substr(s, start, j - start + 1);
+			result[i] = ft_substr(s, start, j - start);
 		}
 		else
 		{
@@ -99,17 +99,17 @@ char	**ft_split(char const *s, char c)
 	return (result);
 }
 
-int	main(void)
-{
-	char	**split;
-	int		i = 0;
+// int	main(void)
+// {
+// 	char	**split;
+// 	int		i = 0;
 
-	split = ft_split("awk '{count++} END {print count}'", ' ');
-	while (split[i])
-	{
-		printf("sp:%s\n", split[i]);
-		i++;
-	}
-	free(split);
-	return 0;
-}
+// 	split = ft_split("awk '{count++} END {print count}'", ' ');
+// 	while (split[i])
+// 	{
+// 		printf("sp:%s\n", split[i]);
+// 		i++;
+// 	}
+// 	free(split);
+// 	return 0;
+// }
