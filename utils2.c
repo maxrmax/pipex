@@ -1,31 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mring <mring@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/06 13:45:57 by mring             #+#    #+#             */
-/*   Updated: 2024/05/06 14:47:45 by mring            ###   ########.fr       */
+/*   Created: 2024/05/07 16:11:39 by mring             #+#    #+#             */
+/*   Updated: 2024/05/07 18:51:52 by mring            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_strlen(const char *str)
-{
-	int	count;
+#include "pipex.h"
 
-	count = 0;
-	while (str[count] != '\0')
+void	child1(int *pipefd, char *cmd1, char **envp, int infile)
+{
+	if (infile > 0)
 	{
-		count++;
+		close(pipefd[0]);
+		dup2(pipefd[1], 1);
 	}
-	return (count);
+	close(pipefd[1]);
+	exec(cmd1, envp);
 }
 
-/*#include <stdio.h>
-int main()
+void	child2(int *pipefd, char *cmd2, char **envp)
 {
-    char str[] = "Co wae worl suh22n20";
-    int length = ft_strlen(str);
-    printf("%i", length);
-}*/
+	close(pipefd[1]);
+	dup2(pipefd[0], 0);
+	close(pipefd[0]);
+	exec(cmd2, envp);
+}
