@@ -6,7 +6,7 @@
 /*   By: mring <mring@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 15:30:03 by mring             #+#    #+#             */
-/*   Updated: 2024/05/07 18:56:32 by mring            ###   ########.fr       */
+/*   Updated: 2024/05/07 20:14:28 by mring            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,13 @@ void	exec(char *cmd, char **envp)
 	mexit(cmd, 127);
 }
 
-// TODO x child for x args / parallel running / concurrency
 void	piping(char *cmd1, char *cmd2, char **envp, int infile)
 {
 	pid_t	pid1;
 	pid_t	pid2;
 	int		pipefd[2];
+	int		status1;
+	int		status2;
 
 	if (pipe(pipefd) == -1)
 		mexit("Pipe", 3);
@@ -63,11 +64,13 @@ void	piping(char *cmd1, char *cmd2, char **envp, int infile)
 		mexit(cmd2, 2);
 	if (pid2 == 0)
 		child2(pipefd, cmd2, envp);
-	close(pipefd[0]);
-	close(pipefd[1]);
-	if (infile > 0)
-		waitpid(pid1, NULL, 0);
-	waitpid(pid2, NULL, 0);
+	if (!close(pipefd[0]) && !close(pipefd[1]) && infile > 0)
+		waitpid(pid1, &status1, 0);
+	waitpid(pid2, &status2, 0);
+	if (WIFEXITED(status1) && WEXITSTATUS(status1) == 127)
+		exit(0);
+	if (WIFEXITED(status2) && WEXITSTATUS(status2) == 127)
+		exit(127);
 }
 
 int	main(int argc, char **argv, char **envp)
