@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils1.c                                           :+:      :+:    :+:   */
+/*   pipex_util.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mring <mring@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 16:11:39 by mring             #+#    #+#             */
-/*   Updated: 2024/05/07 18:58:20 by mring            ###   ########.fr       */
+/*   Updated: 2024/05/10 16:13:48 by mring            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	ft_strchr_index(const char *s, int c)
+int	ft_strchr_i(const char *s, int c)
 {
 	unsigned int	i;
 
@@ -35,7 +35,7 @@ char	*join_path(char *path, char *bin)
 	int		j;
 
 	joined = malloc(sizeof(char)
-			* (ft_strchr_index(path, 0) + ft_strchr_index(bin, 0) + 2));
+			* (ft_strchr_i(path, 0) + ft_strchr_i(bin, 0) + 2));
 	i = 0;
 	j = 0;
 	while (path[j])
@@ -74,15 +74,15 @@ char	*get_path(char *cmd, char **envp)
 	if (!envp || !envp[i])
 		return (join_path("/usr/bin/", cmd));
 	path = envp[i] + 5;
-	while (path && ft_strchr_index(path, ':') > -1)
+	while (path && ft_strchr_i(path, ':') > -1)
 	{
-		dir = ft_strndup(path, ft_strchr_index(path, ':'));
+		dir = ft_strndup(path, ft_strchr_i(path, ':'));
 		bin = join_path(dir, cmd);
 		free(dir);
 		if (access(bin, F_OK) == 0)
 			return (bin);
 		free(bin);
-		path += ft_strchr_index(path, ':') + 1;
+		path += ft_strchr_i(path, ':') + 1;
 	}
 	return (cmd);
 }

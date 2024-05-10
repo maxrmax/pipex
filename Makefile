@@ -6,45 +6,46 @@
 #    By: mring <mring@student.42heilbronn.de>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/02 15:29:54 by mring             #+#    #+#              #
-#    Updated: 2024/05/07 16:22:00 by mring            ###   ########.fr        #
+#    Updated: 2024/05/10 16:11:53 by mring            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME    = pipex
-SRCS    = pipex.c utils1.c utils2.c
-# CFLAGS = -Wall -Wextra -Werror
-OBJS = $(SRCS:.c=.o)
+NAME    := pipex
+SRCS    := pipex.c pipex_util.c pipex_util2.c
+CFLAGS := -Wall -Wextra -Werror
+CC := @cc
 
-# Object files from ft_printf
-FT_PRINTF_OBJS = ft_printf/ft_printf.o ft_printf/ft_printf_print.o
+LIBS := ft_libft/libft.a\
+		ft_printf/libftprintf.a
 
-# Object files from libft
-LIBFT_OBJ = ft_libft/ft_strlen.o ft_libft/ft_calloc.o ft_libft/ft_substr.o ft_libft/ft_strdup.o ft_libft/ft_strlcpy.o ft_libft/ft_memcpy.o ft_libft/ft_strncmp.o ft_libft/ft_strjoin.o ft_libft/ft_split.o
+OBJS := $(SRCS:.c=.o)
 
-# Compilation rule for pipex
-$(NAME): $(OBJS) $(FT_PRINTF_OBJS) $(LIBFT_OBJ)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(FT_PRINTF_OBJS) $(LIBFT_OBJ)
+$(NAME): $(OBJS) $(LIBS)
+	@echo building pipex...
+	$(CC) $(CFLAGS) -o $@ $^
+
+$(LIBS):
+	@make -C ft_libft
+	@make -C ft_printf
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $^ -o $@ -g
 
 all: ${NAME}
 
 clean:
-	rm -f ${OBJS} $(FT_PRINTF_OBJS) $(LIBFT_OBJ)
+	@echo cleaning pipex...
+	@rm -f ${OBJS}
+	@make clean -C ft_libft
+	@make clean -C ft_printf
 
 fclean: clean
-	rm -f ${NAME}
+	@echo fcleaning pipex...
+	@rm -f ${NAME} ${OBJS}
+	@make fclean -C ft_libft
+	@make fclean -C ft_printf
 
 re: fclean all
 
-# Run rule (make and then execute)
-run: $(NAME)
-	./$(NAME) infile "ls -l" "wc -l" outfile
-
-# Run
-doc: $(NAME)
-	./$(NAME) here_doc LIM "ls -l" "wc" outfile
-
-.PHONY:		all clean fclean re
+.PHONY:		all clean fclean re run awk
 # informs comp that these are not files
