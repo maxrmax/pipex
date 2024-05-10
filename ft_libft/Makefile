@@ -10,7 +10,7 @@
 #                                                                              #
 # **************************************************************************** #
 
-# Defining the name of the target (executable)
+# Defining the name of the target
 NAME := libft.a
 
 # Source file names devided by space
