@@ -6,7 +6,7 @@
 #    By: mring <mring@student.42heilbronn.de>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/02 15:29:54 by mring             #+#    #+#              #
-#    Updated: 2024/05/10 16:11:53 by mring            ###   ########.fr        #
+#    Updated: 2024/05/10 16:30:35 by mring            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,8 +15,7 @@ SRCS    := pipex.c pipex_util.c pipex_util2.c
 CFLAGS := -Wall -Wextra -Werror
 CC := @cc
 
-LIBS := ft_libft/libft.a\
-		ft_printf/libftprintf.a
+LIBS := ft_libft/libft.a
 
 OBJS := $(SRCS:.c=.o)
 
@@ -26,7 +25,6 @@ $(NAME): $(OBJS) $(LIBS)
 
 $(LIBS):
 	@make -C ft_libft
-	@make -C ft_printf
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $^ -o $@ -g
@@ -37,13 +35,11 @@ clean:
 	@echo cleaning pipex...
 	@rm -f ${OBJS}
 	@make clean -C ft_libft
-	@make clean -C ft_printf
 
 fclean: clean
 	@echo fcleaning pipex...
 	@rm -f ${NAME} ${OBJS}
 	@make fclean -C ft_libft
-	@make fclean -C ft_printf
 
 re: fclean all
 
