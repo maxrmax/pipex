@@ -6,7 +6,7 @@
 /*   By: mring <mring@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 15:30:03 by mring             #+#    #+#             */
-/*   Updated: 2024/05/10 16:15:31 by mring            ###   ########.fr       */
+/*   Updated: 2024/05/14 13:54:18 by mring            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,11 @@ int	mexit(char *cmd, int errcode)
 	else if (errcode == 127)
 		errmsg = ": command not found\n";
 	else
+	{
+		write(STDERR_FILENO, "pipex: ", 7);
+		write(STDERR_FILENO, cmd, ft_strlen(cmd));
 		exit(errcode);
+	}
 	write(STDERR_FILENO, "pipex: ", 7);
 	write(STDERR_FILENO, cmd, ft_strlen(cmd));
 	write(STDERR_FILENO, errmsg, ft_strlen(errmsg));
@@ -79,7 +83,7 @@ int	main(int argc, char **argv, char **envp)
 	int		infile;
 	int		outfile;
 
-	if (argc < 5)
+	if (argc != 5)
 		mexit("Invalid number of arguments\n", 3);
 	infile = open(argv[1], O_RDONLY);
 	outfile = open(argv[argc - 1], O_TRUNC | O_CREAT | O_RDWR, 0644);
